@@ -86,6 +86,14 @@ class Surtidor {
             cout << endl; // Separador entre transacciones
         }
     }
+    //calcular total de ventas
+    float calcularVentasTotal() const{
+        float total =0;
+        for (int i=0;i<numeroTransacciones;i++){
+            total+=historicoTransacciones[i].getMonto();
+        }
+        return total;
+    }
 
 };
 class Tanque {
@@ -179,6 +187,105 @@ public:
         } 
         else {
             cout << "Categoría de combustible no válida." << endl;
+        }
+    }
+
+};
+class EstacionServicio{
+    string nombre;
+    string codigo;
+    string gerente;
+    string region;
+    float coordenadas[2]; //[LATITUD,LONGITUD]
+    Tanque tanque;
+    Surtidor surtidores[12]; //Arreglo de surtidores
+    int surtidorCount; //contador de surtidores
+
+    //constructor con parametros
+    EstacionServicio(string n, string c, string g , string r, float lat, float lon, float capReg, float capPrem, float capEco )
+        : nombre(n), codigo (c), gerente (g), region(r), surtidorCount(0), tanque(capReg, capPrem, capEco){
+        coordenadas[0]=lat;
+        coordenadas[1]=lon;
+    }
+     //metodo para agregar surtidores
+    bool agragarSurtidor(int codigo,sting modelo){
+        if (surtidorCount<12){
+            surtidores[surtidorCount]=Surtidor(codigo,modelo);//establecer el surtidor
+            surtidorCount++;
+            return true;
+        }
+        cout << "No se pueden agregar mas surtidores.  "<<endl;
+        return false;
+    }
+
+
+    //metodo para eliminar surtidor
+    bool eliminarSurtidor (int codigo){
+        for (int i =0;i<surtidorCount;i++){
+            if (surtidores[i].getCodigo()==codigo){
+                //despazar hacia izquierda
+                for (int j=i;j<surtidorCount-1;j++){
+                    surtidores[j]=surtidores[j+1];
+                }
+                surtidorCount--;
+                cout << "Surtidor"<<codigo<<" eliminado."<<endl;
+                return true;
+            }
+        }
+        cout <<"Surtidor no encontrado."<<endl;
+        return false;
+    }
+
+
+    //Metodo para calcular total de ventas
+    float calcularVentasTotal() const{
+        float total=0;
+        for (int i=0;i<surtidorCount;i++){
+            total += surtidores[i].calcularVentasTotal();//consulta total del surtidor actual
+        }
+        return total;
+    }
+    //metodo para reportar litros vendidos segun categoria
+    void reportarLitrosVendidos (string categoria) const{
+        float totalLitros =0;
+
+        for (int i =0;i< surtidorCount; i++){
+            for (int j=0;j<100;j++){
+                if (surtidores[i].isActivo() && surtidores[i].historicoTransacciones[j].getCantidad()==categoria){
+                    totalLitros+=surtidores[i].historicoTransacciones[j].getCantidad();
+                }
+            }
+        }
+
+        cout<< "Total litros vendidos de "<<categoria<<": "<<totalLitros<<" litros"<<endl;
+    }
+
+    //Metodo para simular una venta de combustible
+    void simularVenta(float cantidadSolicitada, float precioPorLitro, const string& categoria, int documentoCliente){
+        if (surtidorCount>0){
+            cout<<"No hay surtidores disponibles para realizar la venta. "<<endl;
+            return;
+        }
+
+        float cantidadVendida = tanque.venderCombustible(cantidadSolicitada, categoria);
+        if (cantidadVendida>0){
+            string fecha= "2023-10-01"; //Puede ser dinamico
+            string hora ="12:00";//puede ser dinamico
+            float monto=cantidadVendida*precioPorLitro;
+
+            Transaccion nuevaTransaccion(fecha,hora,cantidadVendida,categoria,"Efectivo",documentoCliente,monto);
+            surtidores[0].registrarTransaccion(nuevaTransaccion);//se registra el primer surtidor
+
+            cout << "Venta realizada: "<<cantidadVendida<<" litros de "<< categoria<<" por " << monto<<endl;
+        } else {
+            cout << "No hay suficiente combustible disponible para la venta solicitada."<<endl;
+        }
+    }
+    //historico de transacciones de cada surtidor
+    void mostrarSurtidores() const{
+        for(int i=0;i<surtidorCount;i++){
+            cout<<"Surtidor: "<<surtidores[i].getCodigo()<<", Modelo: "<< surtidores[i].getModelo()<<endl;
+            surtidores[i].mostrarHistorico();//mostrar historial de transacciones
         }
     }
 
