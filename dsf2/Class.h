@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <ctime>
+#include <cstdlib>
 using namespace std;
 
 class Transaccion{
@@ -86,14 +87,22 @@ class Surtidor {
             cout << endl; // Separador entre transacciones
         }
     }
-    //calcular total de ventas
-    float calcularVentasTotal() const{
-        float total =0;
-        for (int i=0;i<numeroTransacciones;i++){
-            total+=historicoTransacciones[i].getMonto();
+    // Calcular las ventas por categoria
+    void calcularVentasPorCategoria(float &totalRegular, float &totalPremium, float &totalEcoExtra) const {
+        for (int i = 0; i < numeroTransacciones; i++) {
+            float monto = historicoTransacciones[i].getMonto();
+            string categoria = historicoTransacciones[i].getCategoria();
+
+            if (categoria == "Regular") {
+                totalRegular += monto;
+            } else if (categoria == "Premium") {
+                totalPremium += monto;
+            } else if (categoria == "EcoExtra") {
+                totalEcoExtra += monto;
+            }
         }
-        return total;
     }
+
 
 };
 class Tanque {
@@ -189,6 +198,20 @@ public:
             cout << "Categoría de combustible no válida." << endl;
         }
     }
+    //Asigna una capacidad aleatoria entre
+    void asignarCapacidadAleatoria() {
+        // Inicializar la semilla para números aleatorios
+        srand(static_cast<unsigned int>(time(0))); // Solo se hace una vez, al inicio
+
+        capacidadRegular = rand() % 101 + 100; // Número aleatorio entre 100 y 200
+        capacidadPremium = rand() % 101 + 100; // Número aleatorio entre 100 y 200
+        capacidadEcoExtra = rand() % 101 + 100; // Número aleatorio entre 100 y 200
+
+        cout << "Capacidades asignadas:\n";
+        cout << "Regular: " << capacidadRegular << " litros\n";
+        cout << "Premium: " << capacidadPremium << " litros\n";
+        cout << "EcoExtra: " << capacidadEcoExtra << " litros\n";
+    }
 
 };
 class EstacionServicio{
@@ -208,7 +231,7 @@ class EstacionServicio{
         coordenadas[1]=lon;
     }
      //metodo para agregar surtidores
-    bool agragarSurtidor(int codigo,sting modelo){
+    bool agregarSurtidor(int codigo,string modelo){
         if (surtidorCount<12){
             surtidores[surtidorCount]=Surtidor(codigo,modelo);//establecer el surtidor
             surtidorCount++;
@@ -236,15 +259,6 @@ class EstacionServicio{
         return false;
     }
 
-
-    //Metodo para calcular total de ventas
-    float calcularVentasTotal() const{
-        float total=0;
-        for (int i=0;i<surtidorCount;i++){
-            total += surtidores[i].calcularVentasTotal();//consulta total del surtidor actual
-        }
-        return total;
-    }
     //metodo para reportar litros vendidos segun categoria
     void reportarLitrosVendidos (string categoria) const{
         float totalLitros =0;
@@ -262,7 +276,7 @@ class EstacionServicio{
 
     //Metodo para simular una venta de combustible
     void simularVenta(float cantidadSolicitada, float precioPorLitro, const string& categoria, int documentoCliente){
-        if (surtidorCount>0){
+        if (surtidorCount==0){
             cout<<"No hay surtidores disponibles para realizar la venta. "<<endl;
             return;
         }
@@ -286,6 +300,68 @@ class EstacionServicio{
         for(int i=0;i<surtidorCount;i++){
             cout<<"Surtidor: "<<surtidores[i].getCodigo()<<", Modelo: "<< surtidores[i].getModelo()<<endl;
             surtidores[i].mostrarHistorico();//mostrar historial de transacciones
+        }
+    }
+    bool tieneSurtidoresActivos() const {
+        for (int i = 0; i < surtidorCount; i++) {
+            if (surtidores[i].isActivo()) {
+                return true; // Si encuentra un surtidor activo, retorna true
+            }
+        }
+        return false; // Si no hay surtidores activos, retorna false
+    }
+
+};
+
+#define MAX_ESTACIONES 100
+class RedEstacione{
+private:
+    EstacionServicio estaciones[MAX_ESTACIONES];
+    int contadorEstaciones;
+public:
+
+    RedEstaciones(): contadorEstaciones(0) {}
+    //metodo para agregar estacion
+    void agregarEstacion(const EstacionServicio& estacion) {
+        if (contadorEstaciones < MAX_ESTACIONES) {
+            estaciones[contadorEstaciones++] = estacion;
+        } else {
+            cout << "Límite de estaciones alcanzado." << endl;
+        }
+    }
+    //Metodo para eliminar una estacion si no tiene ningun surtidor activo
+    void eliminarEstacion(const string& codigo) {
+        for (int i = 0; i < contadorEstaciones; i++) {
+            if (estaciones[i].getCodigo() == codigo) {
+                if (estaciones[i].tieneSurtidoresActivos())
+                {
+                    cout << "No se puede eliminar la estación " << codigo << " porque tiene surtidores activos." << endl;
+                    return; // Salimos porque no se puede eliminar
+                }
+
+                // Si no hay surtidores activos, proceder a eliminar
+                for (int j = i; j < contadorEstaciones - 1; j++)
+                {
+                    estaciones[j] = estaciones[j + 1]; // Desplazar izquierda
+                }
+                contadorEstaciones--;
+                cout << "Estación " << codigo << " eliminada." << endl;
+                return;
+            }
+        }
+        cout << "Estación no encontrada." << endl;
+    }
+    void calcularVentasTotal(float &totalRegular, float &totalPremium, float &totalEcoExtra) const {
+        totalRegular = 0.0;
+        totalPremium = 0.0;
+        totalEcoExtra = 0.0;
+
+        for (int i = 0; i < contadorEstaciones; i++) {
+            float regular = 0.0, premium = 0.0, ecoExtra = 0.0;
+            estaciones[i].calcularVentasPorCategoria(regular, premium, ecoExtra); // Usar el método de la estación
+            totalRegular += regular;
+            totalPremium += premium;
+            totalEcoExtra += ecoExtra;
         }
     }
 
