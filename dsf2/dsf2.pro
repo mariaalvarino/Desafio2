@@ -4,4 +4,10 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-        main.cpp
+        main.cpp \
+        surtidor.cpp \
+        transaccion.cpp
+
+HEADERS += \
+    surtidor.h \
+    transaccion.h
