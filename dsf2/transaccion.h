@@ -16,8 +16,8 @@ private:
     float monto;
 
 public:
-    // Constructor por defecto
-    Transaccion();
+
+    Transaccion();// Constructor por defecto
     // Constructor con parametros
     Transaccion(string f, string h, float c, string cat, string metodo, int doc, float m);
     // Getters

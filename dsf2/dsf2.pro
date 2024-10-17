@@ -6,12 +6,15 @@ CONFIG -= qt
 SOURCES += \
         estacionservicio.cpp \
         main.cpp \
-        precioscombustible.cpp \
+        redestacion.cpp \
         surtidor.cpp \
+        tanque.cpp \
         transaccion.cpp
 
 HEADERS += \
     estacionservicio.h \
-    precioscombustible.h \
+    preciocombustible.h \
+    redestacion.h \
     surtidor.h \
+    tanque.h \
     transaccion.h

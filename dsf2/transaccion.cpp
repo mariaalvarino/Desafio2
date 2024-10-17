@@ -18,12 +18,12 @@ float Transaccion::getMonto() const { return monto; }
 
 // Mostrar detalles de la transacción
 void Transaccion::mostrarDetalles() const {
-    cout << "Detalles de la Transacción:\n"
-         << "Fecha: " << fecha << "\n"
-         << "Hora: " << hora << "\n"
-         << "Cantidad: " << cantidad << " litros\n"
-         << "Categoría: " << categoria << "\n"
-         << "Método de Pago: " << metodoPago << "\n"
-         << "Documento Cliente: " << documentoCliente << "\n"
-         << "Monto: $" << monto << endl;
+    cout << "Detalles de la Transaccion:"<<endl;
+    cout<< "Fecha: " << fecha << endl;
+    cout<< "Hora: " << hora << endl;
+    cout<< "Cantidad: " << cantidad << " litros"<<endl;
+    cout<< "Categoria: " << categoria << endl;
+    cout<< "Metodo de Pago: " << metodoPago << endl;
+    cout<< "Documento Cliente: " << documentoCliente << endl;
+    cout<< "Monto: $" << monto << endl;
 }

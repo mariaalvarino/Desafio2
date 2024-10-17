@@ -15,7 +15,7 @@ int Surtidor::getNumeroTransacciones() const {
 
 const Transaccion& Surtidor::getTransaccion(int index) const {
     if (index < 0 || index >= numeroTransacciones) {
-        throw std::out_of_range("Índice fuera de rango.");
+        throw out_of_range("indice fuera de rango.");
     }
     return historicoTransacciones[index];
 }
@@ -24,9 +24,9 @@ void Surtidor::activar() { activo = true; }
 void Surtidor::desactivar() { activo = false; }
 
 void Surtidor::registrarTransaccion(const Transaccion& transaccion) {
-    if (numeroTransacciones < 100) {
-        historicoTransacciones[numeroTransacciones++] = transaccion;
+    if (numeroTransacciones<100) {
+        historicoTransacciones[numeroTransacciones++]=transaccion;
     } else {
-        std::cout << "Límite de transacciones alcanzado." << std::endl;
+        cout<<"Limite de transacciones alcanzado" <<endl;
     }
 }

@@ -15,7 +15,7 @@ public:
     // Constructor por defecto
     Surtidor();
 
-    // Constructor con parámetros
+    //constructor
     Surtidor(int cod, string mod);
 
     // Getters
@@ -25,7 +25,7 @@ public:
     int getNumeroTransacciones() const;
     const Transaccion& getTransaccion(int index) const;
 
-    // Métodos
+    //metodos
     void activar();
     void desactivar();
     void registrarTransaccion(const Transaccion& transaccion);
