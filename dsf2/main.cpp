@@ -48,16 +48,16 @@ int main() {
                 cout << "Ingrese la latitud de la estacion: "; cin >> lat;
                 cout << "Ingrese la longitud de la estacion: "; cin >> lon;
 
-                // Crear la estación y agregarla a la red
+                // Crear la estacion y agregarla a la red
                 EstacionServicio estacion(nombre, codigo, gerente, region, lat, lon, 150, 180, 170);
                 redEstaciones.agregarEstacion(estacion);
                 cout << "Estacion de servicio agregada exitosamente." <<endl;
                 break;
             }
             case 2: {
-                // Eliminar Estación de Servicio
+                // Eliminar Estacion de Servicio
                 string codigo;
-                cout << endl<<"Ingrese el código de la estación a eliminar: "; cin >> codigo;
+                cout << endl<<"Ingrese el codigo de la estacion a eliminar: "; cin >> codigo;
                 redEstaciones.eliminarEstacion(codigo);
                 break;
             }
@@ -70,19 +70,19 @@ int main() {
                 cout << "Ingrese el codigo del surtidor: "; cin >> codigoSurtidor;
                 cout << "Ingrese el modelo del surtidor: "; cin >> modeloSurtidor;
 
-                // Asegúrate de que el código de estación sea válido
+
                 bool estacionEncontrada = false;
                 for (int i = 0; i < redEstaciones.getContadorEstaciones(); i++) {
                     EstacionServicio* estacion = redEstaciones.getEstacion(i);
                     if (estacion && estacion->getCodigo() == codigoEstacion) {
                         estacion->agregarSurtidor(codigoSurtidor, modeloSurtidor);
-                        std::cout << "Surtidor agregado a la estación." << std::endl;
+                        cout << "Surtidor agregado a la estacion." << endl;
                         estacionEncontrada = true;
                         break;
                     }
                 }
                 if (!estacionEncontrada) {
-                    cout << "Estación no encontrada." << std::endl;
+                    cout << "Estacion no encontrada." << std::endl;
                 }
                 break;
             }
@@ -121,7 +121,6 @@ int main() {
                     EstacionServicio* estacion = redEstaciones.getEstacion(i);
                     if (estacion && estacion->getCodigo() == codigoEstacion) {
                         estacion->simularVenta(cantidadSolicitada, categoria, 12345); // Documento cliente por defecto
-                        cout << "Venta simulada exitosamente"<<endl;
                         estacionEncontrada = true;
                         break;
                     }
@@ -199,13 +198,24 @@ int main() {
                 break;
 
             }
-            case 9: 
+            case 9:{
+                // Verificar Fugas de Combustible
+                string codigoEstacion;
+                cout<<"Ingrese el codigo de la estacion para verificar fugas: ";cin>>codigoEstacion;
+                if (redEstaciones.verificarFugas(codigoEstacion)){
+                    cout<<"Se detecto fuga en la estacion"<<endl;
+                } else {
+                    cout<<"No se detectaron fugas en la estacion"<<endl;
+                }
+                break;
+            }
+            case 10:
                 cout<<"Saliendo del programa gracias por usar nuestros servcios"<<endl;
                 break;
             default:
                 cout<<"Opcion invalida intente de nuevo"<<endl;
         }
-    } while (opcion!=9);
+    } while (opcion!=10);
 
     return 0;
 }

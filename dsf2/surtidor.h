@@ -26,11 +26,13 @@ public:
     const Transaccion& getTransaccion(int index) const;
 
     //metodos
+    float getTotalVendido() const;
     void activar();
     void desactivar();
     void registrarTransaccion(const Transaccion& transaccion);
     void mostrarHistorico() const;
     void calcularVentasPorCategoria(float& totalRegular, float& totalPremium, float& totalEcoExtra) const;
+
 };
 
 #endif // SURTIDOR_H

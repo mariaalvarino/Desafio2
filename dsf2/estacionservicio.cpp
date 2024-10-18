@@ -127,3 +127,13 @@ short int EstacionServicio::obtenerPrecioPorCategoria(const string& categoria) c
     }
     return 0;//no encontrar
 }
+bool EstacionServicio::verificarFugas() const {
+    float totalVendido = 0;
+    for (int i = 0; i < surtidorCount; i++) {
+        totalVendido += surtidores[i].getTotalVendido();
+    }
+    float capacidadTotal = tanque.getCapacidadRegular() + tanque.getCapacidadPremium() + tanque.getCapacidadEcoExtra();
+    float almacenadoActual = tanque.getCantidadRegular() + tanque.getCantidadPremium() + tanque.getCantidadEcoExtra();
+    float porcentaje = (totalVendido + almacenadoActual) / capacidadTotal;
+    return porcentaje < 0.95; // Retorna true si hay fuga
+}

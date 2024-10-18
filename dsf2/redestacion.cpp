@@ -74,13 +74,20 @@ int RedEstacion::getContadorEstaciones()const {
     return contadorEstaciones;
 }
 
-bool RedEstacion::verificarFugas(const string& codigoEstacion) const {
-    EstacionServicio* estacion=getEstacionPorCodigo(codigoEstacion);
-    if (estacion)
-    {
-        return estacion->verificarFugas();
+bool RedEstacion::verificarFugas(const std::string& codigoEstacion) const {
+    EstacionServicio* estacion = getEstacionPorCodigo(codigoEstacion);
+    if (estacion) {
+        return estacion->verificarFugas();  // Llama al método de la estación para verificar fugas
     } else {
-        cout << "Estacion no encontrada" <<endl;
-        return false; //false si no es encontrada la estacion
+        cout << "Estación no encontrada." << endl;
+        return false; // Retorna false si la estación no se encuentra
     }
+}
+EstacionServicio* RedEstacion::getEstacionPorCodigo(const std::string& codigo) const {
+    for (int i = 0; i < contadorEstaciones; ++i) {
+        if (estaciones[i]->getCodigo() == codigo) {
+            return estaciones[i];
+        }
+    }
+    return nullptr;
 }

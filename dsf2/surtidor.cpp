@@ -30,3 +30,29 @@ void Surtidor::registrarTransaccion(const Transaccion& transaccion) {
         cout<<"Limite de transacciones alcanzado" <<endl;
     }
 }
+float Surtidor::getTotalVendido() const {
+    float total = 0;
+    for (int i = 0; i < numeroTransacciones; ++i) {
+        total += historicoTransacciones[i].getCantidad();
+    }
+    return total;
+}
+void Surtidor::calcularVentasPorCategoria(float& totalRegular, float& totalPremium, float& totalEcoExtra) const {
+    for (int i = 0; i < numeroTransacciones; ++i) {
+        string categoria = historicoTransacciones[i].getCategoria();
+        float monto = historicoTransacciones[i].getMonto();
+        if (categoria == "Regular") {
+            totalRegular += monto;
+        } else if (categoria == "Premium") {
+            totalPremium += monto;
+        } else if (categoria == "EcoExtra") {
+            totalEcoExtra += monto;
+        }
+    }
+}
+void Surtidor::mostrarHistorico() const {
+    for (int i = 0; i < numeroTransacciones; ++i) {
+        historicoTransacciones[i].mostrarDetalles();
+        cout << "-------------------" << endl;
+    }
+}

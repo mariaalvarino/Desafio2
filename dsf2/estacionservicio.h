@@ -44,6 +44,7 @@ public:
     void calcularVentasPorCategoria(float& totalRegular, float& totalPremium, float& totalEcoExtra) const;
     Tanque& getTanque();
     short int obtenerPrecioPorCategoria(const std::string& categoria) const;
+    bool verificarFugas() const;
 };
 
 #endif // ESTACIONSERVICIO_H
